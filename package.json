@@ -1,7 +1,7 @@
 {
   "name": "chat_webservice",
   "version": "1.0.0",
-  "description": "Simple REST API\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[DHTTP REST API with Express",
+  "description": "Simple HTTP REST API with Express",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,5 +11,11 @@
     "url": "https://git.s2.rpn.ch/Schallenberger/chat_webservice.git"
   },
   "author": "Gabriel.S",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "bookshelf": "^0.13.3",
+    "express": "^4.16.4",
+    "knex": "^0.13.0"
+  }
 }
