@@ -2,17 +2,17 @@
 
 var express = require('./node_modules/express')
 var bodyParser = require('./node_modules/body-parser')
-var userRoute = require('./routes/r_user')
+var jwt = require('jsonwebtoken')
+var secret = require('./config/secret')
+var user_log = require('./routes/r_user_log')
+//var salon_log = require('./routes/r_salon_log')
 
 var app = express()
+app.set('superSecret',secret.secret);
 
-var PORT = process.env.PORT || 3000
+app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use('/', user_log)
+//app.use('/salon', salon_log)
 
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use('/user', userRoute)
-
-
-app.listen(PORT, function() {
-  console.log('server listening on port %s.', PORT)
-})
+module.exports = app;
