@@ -2,17 +2,21 @@
 
 var express = require('./node_modules/express')
 var bodyParser = require('./node_modules/body-parser')
-var jwt = require('jsonwebtoken')
-var secret = require('./config/secret')
+//Routes functions
 var user_log = require('./routes/r_user_log')
-//var salon_log = require('./routes/r_salon_log')
+var user_list = require('./routes/r_user')
 
+const checkAuth = require('./modules/check_auth')
 var app = express()
-app.set('superSecret',secret.secret);
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
+//Routes
 app.use('/', user_log)
-//app.use('/salon', salon_log)
+//necessite token
+app.use('/user', user_list)
+
+
+
+
 
 module.exports = app;
