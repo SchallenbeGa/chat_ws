@@ -13,9 +13,9 @@ router.get("/", checkAuth, (req, res, next) => {
 });
 
 router.delete("/delete", checkAuth, (req, res, next) => {
-  User.where('userID', req.body.userID)
+  User.where('userName', req.body.userName)
   .destroy()
-  .then(function(user) {
+  .then(function() {
     res.status(200).json({error: false, data: {message: "success"}});
   }).catch(function(err){
     res.status(500).json({error: true, data: {message: err.message}});

@@ -15,8 +15,4 @@ app.use('/', user_log)
 //necessite token
 app.use('/user', user_list)
 
-
-
-
-
 module.exports = app;

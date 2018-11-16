@@ -34,16 +34,19 @@ router.route('/login')
 
 router.route('/register')
   .post(function(req,res){
+    if(req.body.userPass!=req.body.passConf){
+      res.status(400).json({error: true, data: {message: "invalid confirmation password"}});
+    }else{
   var user =new User({
     userName:req.body.userName,
-    userPass:req.body.userPass
+    userPass:req.body.userPass,
   });
   user.save().then(function(){
     res.status(200).json({error: false, data: {message: "success"}});
   }).catch(function(err){
     res.status(500).json({error: true, data: {message: err.message}});
   });
-});
+}});
 
 
 
