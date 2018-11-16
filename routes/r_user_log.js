@@ -21,7 +21,7 @@ router.route('/login')
         res.status(400).json({error: true, data: {message: 'invalid password'}});
       } else {
     const payload = {
-      user: user.get('usertName')};
+      user: user.get('userName')};
         var token = jwt.sign(payload, app.get('superSecret'), {
           expiresIn: 1440
         });
@@ -38,7 +38,7 @@ router.route('/register')
     userName:req.body.userName,
     userPass:req.body.userPass
   });
-  user.save().then(function(saved_user){
+  user.save().then(function(){
     res.status(200).json({error: false, data: {message: "success"}});
   }).catch(function(err){
     res.status(500).json({error: true, data: {message: err.message}});
