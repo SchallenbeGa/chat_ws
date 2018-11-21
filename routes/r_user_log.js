@@ -1,14 +1,13 @@
 'use strict';
 
 var express = require('express');
-var User = require('../models/user');
 var router = express.Router();
 var secret = require('../config/secret')
 var jwt = require('jsonwebtoken')
 
 var app = express()
 app.set('superSecret',secret.secret);
-
+/*
 router.route('/login')
   .post(function(req,res){
     User.where({userName: req.body.userName}).fetch().then(function(user) {
@@ -45,5 +44,5 @@ router.route('/register')
     res.status(500).json({error: true, data: {message: err.message}});
   });
 }});
-
+*/
 module.exports = router;

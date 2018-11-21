@@ -1,12 +1,12 @@
 'use strict';
 
 var express = require('express');
-var Salon = require('../models/salon');
+
 var router = express.Router();
 
 const checkAuth = require("../modules/check_auth");
 
-
+/*
 router.get("/", checkAuth, (req, res, next) => {
     Salon.fetchAll().then(result => {
       res.status(200).json({ message: result });
@@ -47,5 +47,5 @@ router.get("/", checkAuth, (req, res, next) => {
     }).catch(function(err){
       res.status(500).json({error: true, data: {message: err.message}});
     })})
-
+*/
 module.exports = router;
