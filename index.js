@@ -1,21 +1,21 @@
-'use strict';
+var db = require('./config/db')
+var express = require('express')
+var app = express();
+var port = process.env.PORT || 3000
+app.set('port', port);
 
-var express = require('./node_modules/express')
-var bodyParser = require('./node_modules/body-parser')
-//Routes functions
-var user_log = require('./routes/r_user_log')
-var user_list = require('./routes/r_user')
-var salon = require('./routes/r_salon')
+var r_user = require('./routes/r_user')
 
-const checkAuth = require('./modules/check_auth')
-var app = express()
+db.connect(function(err) {
+    if (err) {
+      console.log('Unable to connect to MySQL.')
+      process.exit(1)
+    } else {
+      app.listen(port, function() {
+        console.log('Listening on port 3000...')
+      })
+    }
+  })
 
-app.use(bodyParser.urlencoded({ extended: true }));
-//Routes
-app.use('/', user_log)
-//necessite token
-app.use('/user', user_list)
+app.use('/user',r_user)
 
-app.use('/salon', salon)
-
-module.exports = app;
