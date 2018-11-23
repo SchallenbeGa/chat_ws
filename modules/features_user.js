@@ -7,7 +7,7 @@ exports.getUserSalons = function(req,res) {
   db.query(sql, function (err, result) {
     if (err) throw err;
     if(result!=""){
-      return res.status(200).json({ error:false,salons: result });
+      return res.status(200).json({ error:false,nbSalon:result.length,salons: result });
       }else{
         return res.status(500).json({error:true, message: "user got no salon" });
       }
@@ -19,7 +19,7 @@ exports.getUserFriends = function(req,res) {
     db.query(sql, function (err, result) {
     if (err) throw err;
     if(result!=""){
-      return res.status(200).json({ error:false,friends: result });
+      return res.status(200).json({ error:false,nbFriend:result.length,friends: result });
       }else{
         return res.status(500).json({error:true, message: "user got no friend" });
       }

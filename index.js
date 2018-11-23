@@ -8,17 +8,24 @@ var r_user = require('./routes/r_user')
 
 app.set('port', port);
 
+io.on('connection', function (socket) {
+	socket.on('adduser', function(username){
+    socket.username = username;
+    console.log(username);
+  })
+})
 
-
-io.on('connection', function(socket){  
-  socket.on('join', function (room,userID) {
-    if(room!=null&&userID!=null){
-    socket.join(room);
-    console.log(room,userID)
-    }
-  });        
+io.on('switchRoom', function(newroom){
+  socket.leave(socket.room);
+  socket.join(newroom);
+  socket.emit('updatechat', 'SERVER', 'you have connected to '+ newroom);
+  // sent message to OLD room
+  socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username+' has left this room');
+  // update socket session room title
+  socket.room = newroom;
+  socket.broadcast.to(newroom).emit('updatechat', 'SERVER', socket.username+' has joined this room');
+  socket.emit('updaterooms', rooms, newroom);
 });
-
 
 db.connect(function(err) {
     if (err) {
