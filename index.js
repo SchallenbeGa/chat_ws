@@ -11,21 +11,20 @@ app.set('port', port);
 io.on('connection', function (socket) {
 	socket.on('adduser', function(username){
     socket.username = username;
-    console.log(username);
   })
-})
+  socket.on('chat', function(msg){
+    socket.broadcast.to(socket.room).emit('chat-out',socket.username,msg)
+  })
 
-io.on('switchRoom', function(newroom){
-  socket.leave(socket.room);
-  socket.join(newroom);
-  socket.emit('updatechat', 'SERVER', 'you have connected to '+ newroom);
-  // sent message to OLD room
-  socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username+' has left this room');
-  // update socket session room title
-  socket.room = newroom;
-  socket.broadcast.to(newroom).emit('updatechat', 'SERVER', socket.username+' has joined this room');
-  socket.emit('updaterooms', rooms, newroom);
-});
+  socket.on('switchRoom', function(newroom){
+    socket.broadcast.to(socket.room).emit('chat-out', 'SERVER', socket.username+' has left this room');
+    socket.leave(socket.room);
+    socket.join(newroom);
+    socket.emit('joinSalon', 'SERVER', 'you have connected to '+ newroom);
+    socket.room = newroom;
+    socket.broadcast.to(newroom).emit('chat-out', 'SERVER', socket.username+' has joined this room');
+  });
+})
 
 db.connect(function(err) {
     if (err) {
