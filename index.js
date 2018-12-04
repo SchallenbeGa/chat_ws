@@ -1,10 +1,12 @@
 var db = require('./config/db')
 var express = require('express')
+var bodyParser = require('body-parser')
 var app = express();
 var port = process.env.PORT || 3000
 var server = require('http').createServer(app);
 var io = require("socket.io")(server);
 var r_user = require('./routes/r_user')
+var r_login = require('./routes/r_login')
 
 app.set('port', port);
 
@@ -37,6 +39,7 @@ db.connect(function(err) {
     }
   })
 
-
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/user',r_user)
+app.use('/login',r_login)
 

@@ -11,5 +11,4 @@ router.get("/:userID/salons", (req, res, next) => {
 router.get("/:userID/friends", (req, res, next) => {
  res = feature.getUserFriends(req,res)
 })
-
 module.exports = router;
