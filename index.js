@@ -7,7 +7,7 @@ var server = require('http').createServer(app);
 var io = require("socket.io")(server);
 var r_user = require('./routes/r_user')
 var r_login = require('./routes/r_login')
-
+var r_register = require('./routes/r_register')
 app.set('port', port);
 
 io.on('connection', function (socket) {
@@ -16,7 +16,7 @@ io.on('connection', function (socket) {
   })
   socket.on('chat', function(msg){
     socket.broadcast.to(socket.room).emit('chat-out',socket.username,msg)
-  })
+  })  
 
   socket.on('switchRoom', function(newroom){
     socket.broadcast.to(socket.room).emit('chat-out', 'SERVER', socket.username+' has left this room');
@@ -42,4 +42,5 @@ db.connect(function(err) {
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/user',r_user)
 app.use('/login',r_login)
+app.use('/register',r_register)
 

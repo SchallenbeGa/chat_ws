@@ -37,7 +37,19 @@ exports.postLogin = function(req,res) {
     })
   }
 }
-
+exports.postRegister = function(req,res) {
+  if(req.body.userName==""||req.body.userPass==""){
+    return res.status(500).json({error:true, message: "no input" });
+  }
+    var sql = 'INSERT INTO  tbl_users (userName, userPass) VALUES('+mysql.escape(req.body.userName)+','+mysql.escape(req.body.userPass)+')';
+    db.query(sql, function (err, result) {
+      if (err) {return res.status(300).json({error:true, message: "username already exist" });}
+      if(result!=""){
+        return res.status(200).json({ error:false,message: "registration accepted" }); }else{
+          return res.status(300).json({error:true, message: "error" });
+      }
+    })
+}
 exports.getUserSalons = function(req,res) {
   var sql = 'SELECT tbl_salons.salonName FROM tbl_salons INNER JOIN tbl_user_salon ON tbl_salons.salonID = tbl_user_salon.salonID INNER JOIN tbl_users ON tbl_user_salon.userID = tbl_users.userID WHERE tbl_users.userID LIKE ' + mysql.escape(req.params.userID);
   db.query(sql, function (err, result) {
