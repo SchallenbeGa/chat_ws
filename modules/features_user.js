@@ -1,6 +1,7 @@
 var db = require('../config/db')
 var mysql = require('mysql')
-
+var bcrypt = require('bcrypt')
+var BCRYPT_SALT_ROUNDS = 12;
 
 function checkIfExist(userName){
   var sql = 'SELECT tbl_users.userID FROM tbl_users WHERE tbl_users.userName = ' + mysql.escape(userName);
@@ -17,23 +18,21 @@ function checkIfExist(userName){
 
 exports.postLogin = function(req,res) {
   if(req.body.userName==""||req.body.userPass==""){
-    return res.status(500).json({error:true, message: "no input" });
+    return res.status(200).json({error:true, message: "no input" });
   }
   if(Boolean(checkIfExist(req.body.userName))){
     return res.status(200).json({error:true, message: "no user with that name" });
   }else{
-  var sql = 'SELECT tbl_users.userPass FROM tbl_users WHERE tbl_users.userName LIKE ' + mysql.escape(req.body.userName);
+  var sql = 'SELECT tbl_users.userPass,tbl_users.userID FROM tbl_users WHERE tbl_users.userName LIKE ' + mysql.escape(req.body.userName);
   db.query(sql, function (err, result) {
-    if (err) {return res.status(500).json({error:true, message: "Something went wrong" });}
+    if (err) {return res.status(200).json({error:true,message: "Something went wrong" });}
     if(result!=""){
-      if(result[0].userPass==req.body.userPass){
-        return res.status(200).json({ error:false,message: "connection accepted" });
+      if(bcrypt.compare(result[0].userPass, req.body.userPass)){
+        return res.status(200).json({ error:false,userID:result[0].userID,message: "connection accepted" });
       }else{
         return res.status(200).json({ error:true,message: "wrong password" });
       }
-         }else{
-        return res.status(500).json({error:true, message: "user not found" });
-      }
+    } return res.status(200).json({error:true,message: "user not found" });
     })
   }
 }
@@ -41,13 +40,15 @@ exports.postRegister = function(req,res) {
   if(req.body.userName==""||req.body.userPass==""){
     return res.status(500).json({error:true, message: "no input" });
   }
-    var sql = 'INSERT INTO  tbl_users (userName, userPass) VALUES('+mysql.escape(req.body.userName)+','+mysql.escape(req.body.userPass)+')';
-    db.query(sql, function (err, result) {
-      if (err) {return res.status(300).json({error:true, message: "username already exist" });}
-      if(result!=""){
-        return res.status(200).json({ error:false,message: "registration accepted" }); }else{
-          return res.status(300).json({error:true, message: "error" });
-      }
+  bcrypt.hash(req.body.userPass, BCRYPT_SALT_ROUNDS)
+    .then(function(hashedPassword) {
+      var sql = 'INSERT INTO  tbl_users (userName, userPass) VALUES('+mysql.escape(req.body.userName)+','+mysql.escape(hashedPassword)+')';
+      db.query(sql, function (err, result) {
+        if (err) {return res.status(300).json({error:true, message: "username already exist" });}
+        if(result!=""){
+          return res.status(200).json({ error:false,message: "registration accepted" }); }
+            return res.status(300).json({error:true, message: "error" });   
+      })
     })
 }
 exports.getUserSalons = function(req,res) {
@@ -56,9 +57,9 @@ exports.getUserSalons = function(req,res) {
     if (err) {return res.status(500).json({error:true, message: "Something went wrong" });}
     if(result!=""){
       return res.status(200).json({ error:false,nbSalon:result.length,salons: result });
-      }else{
-        return res.status(200).json({error:true, message: "user got no salon" });
       }
+        return res.status(200).json({error:true, message: "user got no salon" });
+      
     })
   }
 
@@ -68,8 +69,8 @@ exports.getUserFriends = function(req,res) {
     if (err) {return res.status(500).json({error:true, message: "Something went wrong" });}
     if(result!=""){
       return res.status(200).json({ error:false,nbFriend:result.length,friends: result });
-      }else{
-        return res.status(200).json({error:true, message: "user got no friend" });
       }
+        return res.status(200).json({error:true, message: "user got no friend" });
+      
     })
   }
