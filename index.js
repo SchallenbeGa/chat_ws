@@ -1,4 +1,4 @@
-var db = require('./config/db')
+var db_r = require('./config/db').db_r()
 var express = require('express')
 var bodyParser = require('body-parser')
 var app = express();
@@ -28,7 +28,7 @@ io.on('connection', function (socket) {
   });
 })
 
-db.connect(function(err) {
+db_r.connect(function(err) {
     if (err) {
       console.log('Unable to connect to MySQL.')
       process.exit(1)
@@ -38,6 +38,9 @@ db.connect(function(err) {
       })
     }
   })
+
+
+
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/user',r_user)
