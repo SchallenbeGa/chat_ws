@@ -1,4 +1,5 @@
 var db_r = require('./config/db').db_r()
+var db_w = require('./config/db').db_w()
 var express = require('express')
 var bodyParser = require('body-parser')
 var app = express();
@@ -36,11 +37,14 @@ db_r.connect(function(err) {
       server.listen(port, function() {
         console.log('Listening on port 3000...')
       })
+      db_w.connect(function(err) {
+        if (err) {
+          console.log('Unable to connect to MySQL.')
+          process.exit(1)
+        } 
+      })
     }
-  })
-
-
-
+  })  
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/user',r_user)

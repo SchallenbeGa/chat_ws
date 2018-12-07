@@ -1,4 +1,5 @@
 var db_r = require('../config/db').db_r()
+var db_w = require('../config/db').db_w()
 var mysql = require('mysql')
 var bcrypt = require('bcrypt')
 var BCRYPT_SALT_ROUNDS = 12;
@@ -43,9 +44,8 @@ exports.postRegister = function(req,res) {
   bcrypt.hash(req.body.userPass, BCRYPT_SALT_ROUNDS)
     .then(function(hashedPassword) {
       var sql = 'INSERT INTO  tbl_users (userName, userPass) VALUES('+mysql.escape(req.body.userName)+','+mysql.escape(hashedPassword)+')';
-      db.query(sql, function (err, result) {
+      db_w.query(sql, function (err, result) {
         if (err) {return res.status(300).json({error:true, message: "username already exist" });}
-        db.end()
         if(result!=""){
           return res.status(200).json({ error:false,message: "registration accepted" }); }
             return res.status(300).json({error:true, message: "error" });   

@@ -10,3 +10,11 @@ exports.db_r = function(){
   database : 'db_chat'
 });
 }
+exports.db_w = function(){
+  return  new mysql.createConnection({
+  host : 'localhost',
+  user     : 'dbChat_w',
+  password : 'GKBBpVGULiacwBB3',
+  database : 'db_chat'
+});
+}
