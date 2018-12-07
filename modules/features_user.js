@@ -51,6 +51,18 @@ exports.postRegister = function(req,res) {
       })
     })
 }
+exports.postFriend = function(req,res) {
+  if(req.body.userID==""||req.body.friendID==""){
+    return res.status(500).json({error:true, message: "no input" });
+  }
+      var sql = 'INSERT INTO  tbl_user_friend (id_user, id_friend) VALUES('+mysql.escape(req.body.userID)+','+mysql.escape(req.body.friendID)+')';
+      db.query(sql, function (err, result) {
+        if (err) {return res.status(300).json({error:true, message: "friend already in list" });}
+        if(result!=""){
+          return res.status(200).json({ error:false,message: "friend added" }); }
+            return res.status(300).json({error:true, message: "error no res" });   
+    })
+}
 exports.getUserSalons = function(req,res) {
   var sql = 'SELECT tbl_salons.salonName FROM tbl_salons INNER JOIN tbl_user_salon ON tbl_salons.salonID = tbl_user_salon.salonID INNER JOIN tbl_users ON tbl_user_salon.userID = tbl_users.userID WHERE tbl_users.userID LIKE ' + mysql.escape(req.params.userID);
   db.query(sql, function (err, result) {

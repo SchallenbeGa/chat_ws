@@ -11,4 +11,7 @@ router.get("/:userID/salons", (req, res, next) => {
 router.get("/:userID/friends", (req, res, next) => {
  res = feature.getUserFriends(req,res)
 })
+router.post("/friends/add", (req, res, next) => {
+ res = feature.postFriend(req,res)
+})
 module.exports = router;
