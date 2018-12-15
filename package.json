@@ -13,6 +13,7 @@
   "author": "Gabriel.S",
   "license": "ISC",
   "dependencies": {
+    "jsonwebtoken": "^8.4.0",
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
