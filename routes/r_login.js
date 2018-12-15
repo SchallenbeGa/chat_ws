@@ -1,8 +1,6 @@
 'use strict';
 
-var express = require('express')
-var router = express.Router()
-
+var router = require('express').Router()
 var feature = require('../modules/features_user')
 
 router.post("/", (req, res, next) => {

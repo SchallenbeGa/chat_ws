@@ -1,6 +1,8 @@
 var db_r = require('../config/db').db_r()
 var db_w = require('../config/db').db_w()
 var mysql = require('mysql')
+var jwt = require('jsonwebtoken')
+var secret = require('../config/secret').secret
 var bcrypt = require('bcrypt')
 var BCRYPT_SALT_ROUNDS = 12
 
@@ -29,19 +31,21 @@ exports.postLogin = function(req,res) {
     if (err) {return res.status(200).json({error:true,message: "Something went wrong" })}
     if(result!=""){
       if(bcrypt.compareSync(req.body.userPass,result[0].userPass)){
-        return res.status(200).json({ error:false,userID:result[0].userID,message: "connection accepted" })
-      }else{
-        return res.status(200).json({ error:true,message: "wrong password" })
-      }
-    } return res.status(200).json({error:true,message: "user not found" })
-    })
+        const payload = {user: req.body.userName}
+        var token = jwt.sign(payload, secret, {
+          expiresIn: 1440
+        })
+        return res.status(200).json({ error:false,userID:result[0].userID,userToken:token,message: "connection accepted" })
+      }}
+        return res.status(200).json({ error:true,message: "wrong username or password" })
+      })
   }
 }
 exports.postRegister = function(req,res) {
   if(req.body.userName==""||req.body.userPass==""){
     return res.status(500).json({error:true, message: "no input" })
   }
-  var hash = bcrypt.hashSync(req.body.userPass, BCRYPT_SALT_ROUNDS);
+  var hash = bcrypt.hashSync(req.body.userPass, BCRYPT_SALT_ROUNDS)
       var sql = 'INSERT INTO  tbl_users (userName, userPass) VALUES('+mysql.escape(req.body.userName)+','+mysql.escape(hash)+')'
       db_w.query(sql, function (err, result) {
         if (err) {return res.status(300).json({error:true, message: "username already exist" })}

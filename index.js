@@ -9,6 +9,7 @@ var io = require("socket.io")(server);
 var r_user = require('./routes/r_user')
 var r_login = require('./routes/r_login')
 var r_register = require('./routes/r_register')
+
 app.set('port', port);
 
 io.on('connection', function (socket) {
