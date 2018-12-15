@@ -13,25 +13,25 @@ app.set('port', port);
 
 io.on('connection', function (socket) {
 	socket.on('adduser', function(username){
-    socket.username = username;
+    socket.username = username
   })
   socket.on('chat', function(msg){
     socket.broadcast.to(socket.room).emit('chat-out',socket.username,msg)
   })  
 
   socket.on('switchRoom', function(newroom){
-    socket.broadcast.to(socket.room).emit('chat-out', 'SERVER', socket.username+' has left this room');
-    socket.leave(socket.room);
-    socket.join(newroom);
-    socket.emit('joinSalon', 'SERVER', 'you have connected to '+ newroom);
-    socket.room = newroom;
-    socket.broadcast.to(newroom).emit('chat-out', 'SERVER', socket.username+' has joined this room');
+    socket.broadcast.to(socket.room).emit('chat-out', 'SERVER', socket.username+' has left this room')
+    socket.leave(socket.room)
+    socket.join(newroom)
+    socket.emit('joinSalon', 'SERVER', 'you have connected to '+ newroom)
+    socket.room = newroom
+    socket.broadcast.to(newroom).emit('chat-out', 'SERVER', socket.username+' has joined this room')
   });
 })
 
 db_r.connect(function(err) {
     if (err) {
-      console.log('Unable to connect to MySQL.')
+      console.log('Unable to connect to MySQL with select privilege')
       process.exit(1)
     } else {
       server.listen(port, function() {
@@ -39,7 +39,7 @@ db_r.connect(function(err) {
       })
       db_w.connect(function(err) {
         if (err) {
-          console.log('Unable to connect to MySQL.')
+          console.log('Unable to connect to MySQL with insert privilege')
           process.exit(1)
         } 
       })
