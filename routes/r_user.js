@@ -11,4 +11,7 @@ router.get("/:userID/salons",checkAuth,(req, res, next) => {
 router.get("/:userID/friends",checkAuth,(req, res, next) => {
  res = feature.getUserFriends(req,res)
 })
-module.exports = router
+router.post("/friends/add",checkAuth, (req, res, next) => {
+ res = feature.postFriend(req,res)
+})
+module.exports = router;

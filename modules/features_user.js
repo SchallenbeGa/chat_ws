@@ -31,7 +31,7 @@ exports.postLogin = function(req,res) {
     if (err) {return res.status(200).json({error:true,message: "Something went wrong" })}
     if(result!=""){
       if(bcrypt.compareSync(req.body.userPass,result[0].userPass)){
-        const payload = {user: req.body.userName}
+        const payload = {user: result[0].userID}
         var token = jwt.sign(payload, secret, {
           expiresIn: 1440
         })
@@ -53,6 +53,18 @@ exports.postRegister = function(req,res) {
           return res.status(200).json({ error:false,message: "registration accepted" })
         }
         return res.status(300).json({error:true, message: "error" })  
+    })
+}
+exports.postFriend = function(req,res) {
+  if(req.body.userID==""||req.body.friendID==""){
+    return res.status(500).json({error:true, message: "no input" });
+  }
+      var sql = 'INSERT INTO  tbl_user_friend (id_user, id_friend) VALUES('+mysql.escape(req.body.userID)+','+mysql.escape(req.body.friendID)+')';
+      db.query(sql, function (err, result) {
+        if (err) {return res.status(300).json({error:true, message: "friend already in list" });}
+        if(result!=""){
+          return res.status(200).json({ error:false,message: "friend added" }); }
+            return res.status(300).json({error:true, message: "error no res" });   
     })
 }
 exports.getUserSalons = function(req,res) {
