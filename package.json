@@ -13,11 +13,11 @@
   "author": "Gabriel.S",
   "license": "ISC",
   "dependencies": {
-    "jsonwebtoken": "^8.4.0",
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "mysql": "^2.16.0",
+    "jsonwebtoken": "^8.4.0",
+    "pg": "^7.7.1",
     "socket.io": "^2.1.1"
   }
 }

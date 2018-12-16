@@ -1,20 +1,9 @@
 'use strict';
-var mysql = require('mysql')
-//Read | Select only connection
-exports.db_r = function(){
-  return  new mysql.createConnection({
-  host : 'localhost',
-  user     : 'dbChat_r',
-  password : '?tacos$00123',
-  database : 'db_chat'
-})
-}
-//Write connection
-exports.db_w = function(){
-  return  new mysql.createConnection({
-  host : 'localhost',
-  user     : 'dbChat_w',
-  password : 'GKBBpVGULiacwBB3',
-  database : 'db_chat'
+
+const { Client } = require('pg')
+const connectionString = 'postgres://yadkbpnwofehrd:ce304ac4ce4916589f46877f2aec33cbec6a108aaeddbffe87ab5fca4daefdee@ec2-23-21-65-173.compute-1.amazonaws.com:5432/d5bcgpklbc81vv';
+exports.db_w = function(){return  new Client({
+  connectionString: connectionString,
+  ssl: true
 })
 }

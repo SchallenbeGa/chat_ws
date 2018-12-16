@@ -1,4 +1,3 @@
-var db_r = require('./config/db').db_r()
 var db_w = require('./config/db').db_w()
 var express = require('express')
 var bodyParser = require('body-parser')
@@ -30,19 +29,13 @@ io.on('connection', function (socket) {
   });
 })
 
-db_r.connect(function(err) {
+db_w.connect(function(err) {
     if (err) {
       console.log('Unable to connect to MySQL with select privilege')
       process.exit(1)
     } else {
       server.listen(port, function() {
         console.log('Listening on port 3000...')
-      })
-      db_w.connect(function(err) {
-        if (err) {
-          console.log('Unable to connect to MySQL with insert privilege')
-          process.exit(1)
-        } 
       })
     }
   })  
