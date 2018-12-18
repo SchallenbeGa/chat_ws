@@ -35,7 +35,7 @@ db_w.connect(function(err) {
       process.exit(1)
     } else {
       server.listen(port, function() {
-        console.log('Listening on port 3000...')
+        console.log('Listening on port',port)
       })
     }
   })  
